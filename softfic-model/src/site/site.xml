@@ -1,0 +1,19 @@
+<project name="softfic">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.6</version>
+  </skin>
+    <custom>
+    <fluidoSkin>
+      <topBarEnabled>false</topBarEnabled>
+      <sideBarEnabled>true</sideBarEnabled>
+    </fluidoSkin>
+  </custom>
+  <bannerRight>
+    <src>https://i.imgur.com/NwG3bWd.jpg</src>
+  </bannerRight>
+  <body>
+    <menu ref="reports"/>
+  </body>
+</project>

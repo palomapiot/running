@@ -1,0 +1,9 @@
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:05 +0100] "GET / HTTP/1.1" 200 14137 http-bio-8080-exec-1 818
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:06 +0100] "GET /resources/css/bootstrap.min.css HTTP/1.1" 200 141325 http-bio-8080-exec-7 142
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:06 +0100] "GET /resources/css/core.css HTTP/1.1" 200 513 http-bio-8080-exec-2 140
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:07 +0100] "GET /resources/css/custom.css HTTP/1.1" 200 628 http-bio-8080-exec-8 33
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:07 +0100] "GET /resources/css/utils.css HTTP/1.1" 200 3353 http-bio-8080-exec-10 7
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:07 +0100] "GET /resources/js/jquery.min.js HTTP/1.1" 200 95786 http-bio-8080-exec-1 25
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:07 +0100] "GET /resources/js/bootstrap.min.js HTTP/1.1" 200 36816 http-bio-8080-exec-9 20
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:07 +0100] "GET /resources/images/softfic.png HTTP/1.1" 200 8055 http-bio-8080-exec-7 10
+0:0:0:0:0:0:0:1 - - [18/Dec/2017:20:22:08 +0100] "GET /resources/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 18028 http-bio-8080-exec-8 242

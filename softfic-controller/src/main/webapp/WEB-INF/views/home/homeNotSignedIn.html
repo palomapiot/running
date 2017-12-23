@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Home!</title>
+<link rel="shortcut icon" th:href="@{/resources/images/favicon.ico}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/core.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/core.css}" />
+<link href="../../../resources/css/custom.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/custom.css}" />
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/utils.css}" />
+<script src="../../../resources/js/jquery.min.js"
+	th:src="@{/resources/js/jquery.min.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Include Bootstrap Datepicker -->
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+<link rel="stylesheet" 
+	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEtpzjvfsjPvk96bOuEAlOiVUAG74a0Q8"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+<div class="container">
+    <div class="text-center">
+        <h1 class="white">Races Search</h1>
+		<form class="form-narrow form-horizontal" action="#" method="get" th:action="@{/races}">
+			<input type="hidden" name="page" value="0"/>
+			<fieldset class="align-center">
+				<legend class="hidden">Look for races</legend>
+		        <div class="form-group">
+		        	<!-- Buscar por lugar -->
+		            <div class="col-xs-6">
+		                <input type="text" class="form-control" id="inputPlace" placeholder="Place..." name="place" />
+		            </div>
+		            <!-- Botón de posición de usuario -->
+		            <div class="col-xs-2">
+		            	<button class="glyphicon glyphicon-map-marker form-control" type="button" onClick="navigator.geolocation.getCurrentPosition(mapToUserPosition)"
+		            		title="Move map to your position"></button>
+		            </div>
+		            <!-- Radio -->
+		            <div class="col-xs-4">
+		            	<div class="input-group">
+			            	<input type="number" class="form-control flat-right" id="inputDistance" 
+			            		placeholder="Radius (km)" value="30" name="distance"/>
+			            	<span class="input-group-addon flat-left">km</span>
+		            	</div>
+		           </div>
+		        </div>
+		        
+				<!-- Display google map -->
+				<div id="geomap" class="geomap"></div>  
+				
+				<br/>
+				
+				<!-- Calendario Bootstrap -->
+			    <div class="form-group">
+			        <div class="col-xs-6 date">
+			            <div class="input-group input-append date" id="datePicker">
+			                <input type="text" class="form-control" name="minDate" placeholder="From"/>
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			        <div class="col-xs-6 date">
+			            <div class="input-group input-append date" id="datePicker2">
+			                <input type="text" class="form-control" name="maxDate" placeholder="To"/>
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			    </div>
+				
+				<!-- Rango distancias -->
+		        <div class="form-group">
+			        <div class="col-xs-6 date">
+			                <input type="hidden" class="form-control" id="distancePicker" name="minDistance" placeholder="Min. Distance (m)" value="0"/>
+			        </div>
+			        <div class="col-xs-6 date">
+			                <input type="hidden" class="form-control" id="distancePicker2" name="maxDistance" placeholder="Max. Distance (m)" value="20000" />
+			        </div>
+			        
+			        <div>
+			        	<strong><span>Race distance</span></strong> 
+			        </div>
+			        <div class="col-xs-2">
+			        	<strong><span id="minDistSlider">0km</span></strong> 
+			        </div>
+			        <div class="col-xs-6">
+			        	<input id="distanceSlider" type="text" class="span2" 
+			        		value="" data-slider-min="0" data-slider-max="500" 
+			        		data-slider-step="1" data-slider-value="[0,20]"/> 
+			        </div>
+			        <div class="col-xs-4">
+				        <strong><span id="maxDistSlider">20km</span></strong>
+			        </div>			        
+			    </div>
+			    
+			    <br/> 
+			    
+			    <!-- Rango precios -->
+				<div class="form-group">
+			        <div class="col-xs-6 date">
+			                <input type="hidden" class="form-control" id="pricePicker" name="minPrice" placeholder="Min. Price (€)" value="0"/>
+			        </div>
+			        <div class="col-xs-6 date">
+			                <input type="hidden" class="form-control" id=pricePicker2 name="maxPrice" placeholder="Max. Price (€)" value="50" />
+			        </div>
+			        
+			        <div>
+			        	<strong><span>Race price</span></strong> 
+			        </div>
+			        <div class="col-xs-2">
+			        	<strong><span id="minPriceSlider">0€</span></strong> 
+			        </div>
+			        <div class="col-xs-6">
+			        	<input id="priceSlider" type="text" class="span2" 
+			        		value="" data-slider-min="0" data-slider-max="200" 
+			        		data-slider-step="1" data-slider-value="[0,20]"/> 
+			        </div>
+			        <div class="col-xs-4">
+				        <strong><span id="maxPriceSlider">50€</span></strong>
+			        </div>			        
+			    </div>
+			    
+			    <!-- Prueba médica -->
+			    <div class="form-inline">
+				    <div class="form-group">
+				    	<label class="control-label">Medical Test: </label>
+						<select class="form-control" id="medicalTestSelect" >
+							<option value="0">All</option>
+							<option value="1">Without medical test</option>
+							<option value="2">With medical test</option>
+						</select>
+						<input type="hidden" id="inputMedicalTestSelect" name="medicalTest" value="0" />
+					</div>
+				</div>
+				
+				<!-- Ordenación de la búsqueda -->
+			    <div class="form-inline" hidden>
+			     <label for="inputOrderType" class="control-label">Order Type: </label>
+		            <select class="form-control" id="inputOrderType" name="orderType" th:field="${orderType}">
+			            <option value="3">Select an order criterion</option>
+			            <option th:each="orderType: ${T(es.udc.fi.dc.fd.race.OrderType).values()}"
+					          th:value="${orderType.nOrder}" 
+					          th:text="${orderType}">
+   						</option>
+		            </select>
+		            <input type="hidden" id= "inputOType" name="orderType" value="8"/>			    
+			    </div>
+			    
+			    <a th:href="@{/signin}" class="btn btn-success pull-left">Add New Race</a>
+				<button type="submit" class="btn btn-primary pull-right">Search</button>	
+			</fieldset>
+		</form>
+   	</div>
+   	<div th:replace="fragments/layout :: footer">&copy; 2016 The Static Templates</div>
+</div>
+
+<!-- Scripts -->
+<script>
+$(document).ready(function() {
+    $('#datePicker')
+        .datepicker({
+            format: 'mm-dd-yyyy'
+        })
+        .on('changeDate', function(e) {
+            // Revalidate the date field
+            $('#eventForm').formValidation('revalidateField', 'date');
+        });
+    $('#datePicker2')
+	    .datepicker({
+	        format: 'mm-dd-yyyy'
+	    })
+	    .on('changeDate', function(e) {
+	        // Revalidate the date field
+	        $('#eventForm').formValidation('revalidateField', 'date');
+	    });
+    $("#inputOrderType").change(function () {
+    	if ($(this).val() >= 0) {
+        	$("#inputOType").val($(this).val());
+    	} else {
+        	$("#inputOType").val(0);
+    	}
+    });
+   /* $("#inputPlace").change(function () {
+    	if($(this).val() == null || $(this).val() == "") {
+    		$("#inputDistance").prop("readonly", true);
+    	} else {
+    		$("#inputDistance").prop("readonly", false);
+    	}
+    });*/
+    $("#medicalTestSelect").change(function () {
+    	if ($(this).val() >= 0) {
+        	$("#inputMedicalTestSelect").val($(this).val());
+    	}
+    });
+
+    $("#distanceSlider").bootstrapSlider({scale: 'logarithmic'})
+	.on('slide', updateDistancia);
+
+	$("#priceSlider").bootstrapSlider({scale: 'logarithmic'})
+	.on('slide', updatePrice);
+    
+});
+
+function updateDistancia(e) {
+	$("#distancePicker").val(e.value[0]*1000);
+	$("#minDistSlider").text(e.value[0] + 'km');
+	
+	if (e.value[1] == 500) {
+		$("#distancePicker2").val('');
+		$("#maxDistSlider").text('500 km o más');
+	} else {
+		$("#distancePicker2").val(e.value[1]*1000);
+		$("#maxDistSlider").text(e.value[1] + 'km');
+	}
+}
+
+function updatePrice(e) {
+	$("#pricePicker").val(e.value[0]);
+	$("#minPriceSlider").text(e.value[0] + '€');
+	
+	if (e.value[1] == 200) {
+		$("#pricePicker2").val('');
+		$("#maxPriceSlider").text('200 € o más');
+	} else {
+		$("#pricePicker2").val(e.value[1]);
+		$("#maxPriceSlider").text(e.value[1] + '€');
+	}
+}
+
+var geocoder;
+var map;
+var marker;
+
+/*
+ * Google Map with marker
+ */
+function initialize() {
+    var initialLat = 43.3623436;
+    var initialLong = -8.4115401;
+
+    var latlng = new google.maps.LatLng(initialLat, initialLong);
+    var options = {
+        zoom: 16,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("geomap"), options);
+
+    geocoder = new google.maps.Geocoder();
+
+    marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: latlng
+    });
+
+    google.maps.event.addListener(marker, "dragend", function () {
+        var point = marker.getPosition();
+        map.panTo(point);
+        geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                marker.setPosition(results[0].geometry.location);
+                $('#inputPlace').val(results[0].formatted_address);
+            }
+        });
+    });
+
+}
+
+$(document).ready(function () {
+    //load google map
+    initialize();
+    
+    /*
+     * autocomplete location search
+     */
+    var PostCodeid = '#inputPlace';
+    $(function () {
+        $(PostCodeid).autocomplete({
+            source: function (request, response) {
+                geocoder.geocode({
+                    'address': request.term
+                }, function (results, status) {
+                    response($.map(results, function (item) {
+                        return {
+                            label: item.formatted_address,
+                            value: item.formatted_address,
+                            lat: item.geometry.location.lat(),
+                            lon: item.geometry.location.lng()
+                        };
+                    }));
+                });
+            },
+            select: function (event, ui) {
+                var latlng = new google.maps.LatLng(ui.item.lat, ui.item.lon);
+                marker.setPosition(latlng);
+                initialize();
+                var address = $(PostCodeid).val();
+                geocoder.geocode({'address': address}, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        marker.setPosition(results[0].geometry.location);
+            } else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            }
+        });
+    });
+});
+
+// Posición local del usuario
+function mapToUserPosition(position){
+	var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	// Mover el mapa y el  marcador
+	map.panTo(userLatLng);
+	marker.setPosition(userLatLng);
+	// Necesario para rellenar el input de place automáticamente
+    geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            $('#inputPlace').val(results[0].formatted_address);
+        }
+    });
+
+}
+
+/* Inicializa la posición del mapa a la posición del usuario en caso de que el usuario otorgue los permisos
+ *  - navigator.geolocation.getCurrentPosition(xxx): Necesario para pasarle el argumento "position" a la función "mapToUserPosition" 
+ */
+navigator.geolocation.getCurrentPosition(mapToUserPosition);	
+</script>
+</body>
+</html>

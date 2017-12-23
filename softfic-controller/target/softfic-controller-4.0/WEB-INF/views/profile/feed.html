@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{view.index.title}">Feed</title>
+<link rel="shortcut icon" th:href="@{/resources/images/favicon.ico}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/core.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/core.css}" />
+<script src="../../../resources/js/jquery.min.js"
+	th:src="@{/resources/js/jquery.min.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/utils.css}" />
+	
+	<script src="https://use.fontawesome.com/331fadac2d.js"></script>
+	
+</head>
+<body>
+	<div th:replace="fragments/layout :: header"></div>
+	<h2 class="text-center white">Feed</h2>
+	<div class="form-80wide">
+		<div class="container">
+		<div th:if="${not #lists.isEmpty(timeline.getContent())}">
+				<div id="more-races" class="more-races">
+					<table>
+						<tr class="text-left activity" th:each="activity: ${timeline.getContent()}">
+							<td class="time" th:text="${activity.getFormattedTime()}">00:00</td>
+							<td class="actdesc" th:utext="${activity.toString('__@{/}__')}"></td>
+						</tr>				
+					</table>
+				</div>			
+			</div>
+			<p th:if="${#lists.isEmpty(timeline.getContent())}"
+					class="h4 text-center">No feed found.</p>
+		</div>
+		<!-- Pagination Bar -->
+		<div th:if="${not #lists.isEmpty(timeline.getContent())}">
+			<div class="text-center">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li
+							th:class="${not timeline.hasPrevious()}? 'disabled page-item' : 'page-item'">
+							<span th:if='${not timeline.hasPrevious()}'>&laquo;</span> <a
+							class="page-link" th:if='${timeline.hasPrevious()}'
+							th:href="@{/feed(page=(${timeline.getNumber()}-1))}"
+							title="Go to previous page">&laquo;</a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(1, timeline.getTotalPages())}"
+							th:class="${i == (timeline.getNumber()+1)}? 'active page-item' : 'page-item'">
+							<span th:if='${i == (timeline.getNumber()+1)}' th:text='${i}'>1</span>
+							<a class="page-link"
+							th:if='${not (i == (timeline.getNumber()+1))}'
+							th:href="@{/feed(page=(${i}-1))}"> <span th:text='${i}'>1</span></a>
+						</li>
+						<li
+							th:class="${timeline.hasNext()}? 'page-item' : 'disabled page-item'">
+							<span th:if='${not timeline.hasNext()}'>&raquo;</span> <a
+							class="page-link" th:if='${timeline.hasNext()}'
+							th:href="@{/feed(page=(${timeline.getNumber()}+1))}"
+							title='Go to next page'>&raquo;</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

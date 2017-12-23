@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: es.udc.fi.dc.fd.ranking.RankingServiceTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.467 sec - in es.udc.fi.dc.fd.ranking.RankingServiceTest

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Account</title>
+<link rel="shortcut icon" th:href="@{/resources/images/favicon.ico}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/core.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/core.css}" />
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/utils.css}" />
+<script src="../../../resources/js/jquery.min.js"
+	th:src="@{/resources/js/jquery.min.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script src="https://use.fontawesome.com/331fadac2d.js"></script>
+
+</head>
+<body>
+	<div th:replace="fragments/layout :: header"></div>
+	<div class="col-xs-12">
+		<button type="button"
+			class="btn btn-default glyphicon glyphicon-arrow-left"
+			onclick="goBack()"></button>
+	</div>
+
+	<h2 class="text-center white" th:text="${profile.getUsername()} + ' ' + #{account.h}"></h2>
+	<div class="form-80wide">
+	<div class="container">
+		<div>
+		<div class="col-xs-5 mt-30 text-center">
+			<!-- Imagen de perfil -->
+			<div class="row" th:if="${#authentication.name == profile.email || !profile.getPrivateAccount() || following.toString() == 'FOLLOWING'}">
+				<img class="profile-img" th:src="@{'data:image/jpeg;base64,'+${profile.getImage()}}" alt="Profile image"/>
+			</div>
+			
+			<div class="inline" th:if="${#authentication.name == profile.email || !profile.getPrivateAccount() || following.toString() == 'FOLLOWING'}">
+			
+				<!-- Botón para editar los datos del perfil -->
+				<button th:if="${#authentication.name == profile.email}" type="button" class="btn btn-success mt-30"
+					th:onclick="'window.location.href = \'' + @{/editProfile} + '\''">Edit Profile</button>
+					
+				<!-- Botón para ver las carreras -->
+				<button type="button" class="btn btn-success mt-30"
+		 			th:onclick="'window.location.href = \'' + @{/profile?page=0&id={raceId}(raceId=${profile.id})} + '\''">
+		 		Races</button>
+		 		
+	 		</div>
+	 		
+			<div th:if="${#authentication.name != profile.email}" class="center mt-20">
+				<button th:id="${'follow-button' + profile.id}"
+						th:if="${following.toString()=='NOT_FOLLOWING'}" type="button"
+						class="btn btn-success custom-size"
+						th:onclick="'javascript:followUser(\'' + ${profile.id} + '\');'">
+						Follow
+				</button>
+					<button th:id="${'follow-button' + profile.id}"
+						th:if="${following.toString()=='FOLLOWING'}" type="button"
+						class="btn btn-danger custom-size"
+						th:onclick="'javascript:followUser(\'' + ${profile.id} + '\');'">
+						Unfollow
+				</button>
+				<button th:id="${'follow-button' + profile.id}"
+					th:if="${following.toString()=='PENDING'}" type="button"
+					class="btn btn-info custom-size"
+					th:onclick="'javascript:followUser(\'' + ${profile.id} + '\');'">
+					Pending
+				</button>
+			</div>
+			
+			
+	 		
+		</div>	
+		<!-- Tabla con datos del perfil -->
+		<div class="col-xs-7" th:if="${#authentication.name == profile.email || !profile.getPrivateAccount() || following.toString() == 'FOLLOWING'}">
+			<table class="table borderless table-responsive mt-30">
+				<tr>
+					<th th:text="#{label.name}" class="text-right">Name</th>
+					<td th:text="${profile.getName()}">name</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.surname}" class="text-right">Surname</th>
+					<td th:text="${profile.getSurname()}">surname</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.birthday}" class="text-right">Birthday</th>
+					<td th:text="${#dates.format(profile.getBirthday(), 'dd-MMM-yyyy')}">birthday</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.usrn}" class="text-right">username</th>
+					<td th:text="${profile.getUsername()}">username</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.email}" class="text-right">email</th>
+					<td th:text="${profile.getEmail()}">email</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.city}" class="text-right">city</th>
+					<td th:text="${profile.getCity()}">city</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.country}" class="text-right">country</th>
+					<td th:text="${profile.getCountry()}">country</td>
+				</tr>
+				<tr>
+					<th th:text="#{label.bio}" class="text-right">bio</th>
+					<td th:text="${profile.getBio()}">bio</td>
+				</tr>
+				<!-- Cambiar privacidad -->
+				<tr th:if="${#authentication.name} == ${profile.email}">
+					<th th:text="#{label.priv}" class="text-right">privacy</th>
+					<td>
+						<span th:data-priv="${!profile.privateAccount}" id="spanPrivate" th:text="|#{label.private}  ${profile.getPrivateAccount()? 'Yes' : 'No'}"></span>
+						<button id="change"
+							type="button"
+							class="btn btn-info btn-xs glyphicon"
+							th:classappend="${profile.privateAccount} ? 'glyphicon-eye-close' : 'glyphicon-eye-open'"
+							th:onclick="'javascript:changePriv();'">
+						</button>
+					</td>
+						
+				</tr>
+			</table>
+			
+		</div>
+				<div class="col-xs-7 mt-30 text-center alert alert-warning"
+			th:if="${#authentication.name != profile.email && profile.getPrivateAccount() && following.toString() != 'FOLLOWING'}"
+			 th:text="#{not.following.message}">
+			
+			</div>
+		<!-- Zona de timeline -->
+		<div class="mt-20" th:if="${#authentication.name == profile.email || !profile.getPrivateAccount() || following.toString() == 'FOLLOWING'}">
+		<div class="container" th:if="${!timeline.getContent().isEmpty()}" >
+			<div>
+				<!-- Pagination bar -->
+				<div>
+					<a id="loadLess" class=" text-left float-left btn btn-default btn-sm " href="javascript:void(0)" onclick="loadLess()"><span class="glyphicon glyphicon-chevron-left"></span>Ver anteriores</a>
+					<a id="loadMore" style="float:right" class=" text-right float-right btn btn-default btn-sm " href="javascript:void(0)" onclick="loadMore()"><span class="glyphicon glyphicon-chevron-right"></span>Ver más </a>
+				</div>
+				<!-- Activity rows -->
+				<div id="moreRaces" class="more-races">
+					<table th:fragment="timelineZone">
+						<tr class="text-left activity" th:each="activity: ${timeline.getContent()}">
+							<td class="time" th:text="${activity.getFormattedTime()}">00:00</td>
+							<td class="actdesc" th:utext="${activity.toString('__@{/}__')}"></td>
+						</tr>				
+					</table>
+				</div>			
+			</div>
+		</div>
+		</div>
+		</div>
+		
+		
+	</div>
+	
+	</div>
+
+<script>
+	var page=0;
+	$("#loadLess").hide();
+	$("#loadMore").hide();
+	if ([[${timeline.getTotalPages()}]] > 1){
+		$("#loadMore").show();
+	}
+	function goBack() {
+	    window.history.back()
+	}
+    
+    function followUser(id) {
+		$.get("[[@{/account/}]] "+ id + "/follow", 
+			function(data) {
+				if (data == 1) { // ha seguido al usuario
+					$("#follow-button" + id).removeClass("btn-success").addClass("btn-danger").text("Unfollow")
+				} else if (data == 0) { // ha dejado de seguir al usuario
+					$("#follow-button" + id).removeClass("btn-danger").removeClass("btn-info").addClass("btn-success").text("Follow")
+				} else { // queda pendiente
+					$("#follow-button" + id).removeClass("btn-success").addClass("btn-info").text("Pending")
+				}
+			})
+	}
+    
+    function changePriv() {
+    	var change = $("#spanPrivate").attr("data-priv");
+		$.get("[[@{/myprofile/}]] "+ change);
+		if (change == "true") { // si la cuenta pasa a privada
+					$("#spanPrivate").text('Private: Yes');
+					$("#spanPrivate").attr("data-priv", false);
+					$("#change").removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close");
+				} else { // si la cuenta pasa a pública
+					$("#spanPrivate").text('Private: No');
+					$("#spanPrivate").attr("data-priv", true);
+					$("#change").removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open");
+				}
+	}
+    
+
+    function loadMore(){
+    	console.log("MORE");
+    	page=page+1;
+    	$("#moreRaces").load("[[@{/timeline?page=}]]" + page + "&accId="+ [[${profile.getId()}]]);
+    	if (page>=([[${timeline.getTotalPages()}]]-1)){
+    		$("#loadMore").hide();
+    	}
+    	$("#loadLess").show();
+    }
+    function loadLess(){
+    	page=page-1;
+    	$("#moreRaces").load("[[@{/timeline?page=}]]" + page + "&accId="+ [[${profile.getId()}]]);
+    	if (page<=0){
+    		$("#loadLess").hide();
+    	}
+    	$("#loadMore").show();
+    }
+
+    </script>
+	<div th:replace="fragments/layout :: footer"></div>
+</body>

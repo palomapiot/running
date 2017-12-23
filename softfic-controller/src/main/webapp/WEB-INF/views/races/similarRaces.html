@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{view.index.title}">Welcome!</title>
+<link rel="shortcut icon" th:href="@{/resources/images/favicon.ico}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/core.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/core.css}" />
+<script src="../../../resources/js/jquery.min.js"
+	th:src="@{/resources/js/jquery.min.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/utils.css}" />
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/tables.css}" />
+</head>
+<body>
+	<div th:replace="fragments/layout :: header"></div>
+	<h2 class="text-center white">Races</h2>
+	<div class="form-80wide">
+		<div class="container">
+			<div>
+				<table th:if="${not #lists.isEmpty(raceList)}"
+					class="table table-striped table-hover table-responsive mt-30">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Place</th>
+							<th>Date</th>
+							<th>Medical Test</th>
+							<th>Distance</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="race: ${raceList}" style="cursor: pointer"
+							th:onclick="'window.location.href = \'' + @{/racedetails(raceId=${race.id})} + '\''">
+							<td th:text="${race.name}">name</td>
+							<td th:text="${race.place.getName()}">place</td>
+							<td th:text="${#dates.format(race.date, 'dd-MMM-yyyy')}">date</td>
+							<td th:text="${race.medicalTest}? 'Yes' : 'No'">medicalTest</td>
+							<td th:text="${race.distance}">place</td>
+						</tr>
+					</tbody>
+				</table>
+				<br></br>
+				<h5 class="text-left">None of these is your race? Add yours!</h5>	
+				<table
+					class="table table-striped table-hover table-responsive mt-30">
+					<tr>
+						<th>Name</th>
+						<th>Place</th>
+						<th>Date</th>
+						<th>Medical Test</th>
+						<th>Distance</th>
+					</tr>
+					<tr>
+						<td th:text="${raceAdd.name}">name</td>
+						<td th:text="${raceAdd.place.getName()}">place</td>
+						<td th:text="${#dates.format(raceAdd.date, 'dd-MMM-yyyy')}">date</td>
+						<td th:text="${raceAdd.medicalTest}? 'Yes' : 'No'">medicalTest</td>
+						<td th:text="${raceAdd.distance}">place</td>
+					</tr>
+				</table>	
+				<div class="text-right">
+					<a type="button" class="btn btn-danger" th:href="@{'/'}">
+						Cancel
+					</a>
+					<a type="button" id="addRaceButton" class="btn btn-success">
+						Add race
+					</a>			
+				</div>
+			</div>
+		</div>
+	</div>
+	<form id="addRaceForm" method="post" th:action="@{/confirmcreaterace}" style="display: none"
+				th:object="${raceForm}" th:fragment="raceForm">
+				<div class="modal-body modal-addrace">
+					<input style="display:none" type="checkbox" class="form-control"
+								id="inputInternal" name="IsInternal"
+								th:field="*{isInternal}" value="${raceAdd.getIsInternal()}"/>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputName" class="control-label text-right">Name:
+							</label> <input type="text" class="form-control" id="inputName"
+								placeholder="Name" name="Name" th:field="*{name}"  value="${raceAdd.getName()}" required />
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputPlace" class="control-label text-right">Place:
+							</label> <input type="text" class="form-control" id="inputPlace"
+								placeholder="Place" name="Place" th:field="*{place}" value="${raceAdd.getPlace().getName()}" required />
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputDate" class="control-label text-right">Date:
+							</label>
+							<div class="input-group input-append date" id="inputDate">
+								<input type="text" class="form-control" id="inputDate"
+									placeholder="mm/dd/yyyy" name="Date" th:field="*{date}"
+									required  value="${raceAdd.getDate()}"/> <span class="input-group-addon add-on"><span
+									class="glyphicon glyphicon-calendar"></span></span>
+							</div>
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputWebsite" class="control-label text-right">Website:
+							</label> <input type="url" class="form-control" id="inputWebsite"
+								placeholder="http://" name="Website" th:field="*{website}" value="${raceAdd.getWebsite()}"/>
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputImage" class="control-label text-right">Image:
+							</label> <input type="url" class="form-control" id="inputImage"
+								placeholder="Image link" name="Image" th:field="*{image}" value="${raceAdd.getImage()}"/>
+						</div>
+					</div>
+					
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputMedicalTest" class="control-label text-right">Medical
+								Test: </label> <input type="checkbox" class="form-control"
+								id="inputMedicalTest" name="MedicalTest"
+								th:field="*{medicalTest}" value="${raceAdd.getMedicalTest()}"/>
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputChip" class="control-label text-right">Available
+								Chip: </label> <input type="checkbox" class="form-control"
+								id="inputChip" name="Chip" th:field="*{chip}" value="${raceAdd.getChip()}"/>
+						</div>
+						<div id="divChipPrice" class="form-group">
+							<label for="inputChipPrice" class="control-label text-right">Chip
+								Price (€): </label> <input type="number" min="0" step="any"
+								class="form-control" id="inputChipPrice"
+								placeholder="Chip Price" name="ChipPrice"
+								th:field="*{chipPrice}" value="${raceAdd.getChipPrice()}"/>
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputRaceType" class="control-label text-right">Race
+								Type: </label> 
+							<select class="form-control" id="inputRaceType"
+							name="RaceType" th:field="*{raceType}">
+								<option value="0">Select a race type</option>
+								<option
+									th:each="raceType : ${T(es.udc.fi.dc.fd.race.RaceType).values()}"
+									th:value="${raceType.distance}" th:text="${raceType}">
+   									</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-inline">
+						<div class="form-group">
+							<label for="inputDistance2" class="control-label text-right">Distance
+								(m): </label> <input type="number" class="form-control"
+								id="inputDistance2" name="Distance" th:field="*{distance}"
+								readonly value="${raceAdd.getRaceType().getDistance()}"/>
+						</div>
+					</div>
+					
+					<div class="form-inline" th:each="tariff: ${raceAdd.getPrices()}" style="cursor: pointer">
+						<div class="clone-row form-group-row">
+			            	<label id="labelId" class="control-label text-right">Price:</label>
+	       					<input id="priceInput" class="form-control" type="number" name="prices" th:value="${tariff.price}"/>
+	       					<input id="minAgeInput" placeholder="Minimum age" class="form-control" type="number" name="minAges" th:value="${tariff.minAge}"/>
+	       					<input id="maxAgeInput" placeholder="Maximum age" class="form-control" type="number" name="maxAges" th:value="${tariff.maxAge}"/>
+			        	</div>			        
+					</div>
+					<!-- <div class="form-inline" th:if="${#lists.isEmpty(raceAdd.getPrices())}" style="cursor: pointer">
+						<div class="clone-row form-group">
+			            	<label id="labelId" class="control-label text-right">Price:</label>
+	       					<input id="priceInput" class="form-control" type="number" name="prices" />
+	       					<input id="minAgeInput" placeholder="Minimum age" class="form-control" type="number" name="minAges" />
+	       					<input id="maxAgeInput" placeholder="Maximum age" class="form-control" type="number" name="maxAges" />
+			        	</div>		        
+					</div>		-->			
+				</div>
+			</form>
+</body>
+<script type="text/javascript">
+
+$("#addRaceButton").click(function () {
+	$("#addRaceForm").submit();
+});
+	
+</script>
+</html>

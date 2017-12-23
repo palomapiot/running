@@ -1,0 +1,12 @@
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/config/WebSecurityConfigurationAware.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/config/NoCsrfSecurityConfig.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/config/EmbeddedDataSourceConfig.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/enrollment/EnrollmentControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/follow/FollowControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/web/SeleniumWebIT.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/race/RaceControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/account/UserAuthenticationIntegrationTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/signup/SignupControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/activity/ActivityControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/ranking/RankingControllerTest.java
+/home/piot/fdworkspace/softfic/softfic-controller/src/test/java/es/udc/fi/dc/fd/config/WebAppConfigurationAware.java

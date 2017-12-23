@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Softfic Running
+Implementation-Version: 3.5.1-SNAPSHOT
+Built-By: piot
+Implementation-Vendor-Id: es.udc.fi.dc.fd
+Build-Jdk: 1.8.0_151
+Implementation-URL: http://deploy.fic.udc.es/softfic
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Facultad de Informￃﾡtica de A Coruￃﾱa
+

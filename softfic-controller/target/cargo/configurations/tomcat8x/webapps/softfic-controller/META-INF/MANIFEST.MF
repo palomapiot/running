@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Implementation-Title: Softfic Running Controller
+Implementation-Version: 4.0
+Archiver-Version: Plexus Archiver
+Built-By: piot
+Implementation-Vendor-Id: es.udc.fi.dc.fd
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_92
+Implementation-URL: http://deploy.fic.udc.es/softfic/softfic-controlle
+ r
+Implementation-Vendor: Facultad de Informática de A Coruña
+

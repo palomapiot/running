@@ -1,0 +1,12 @@
+es/udc/fi/dc/fd/attendance/AttendanceIntegrationTest.class
+es/udc/fi/dc/fd/activity/ActivityServiceTest.class
+es/udc/fi/dc/fd/ranking/RankingServiceIntegrationTest.class
+es/udc/fi/dc/fd/config/EmbeddedDataSourceConfig.class
+es/udc/fi/dc/fd/config/WebAppConfigurationAware.class
+es/udc/fi/dc/fd/race/RaceServiceTest.class
+es/udc/fi/dc/fd/config/NoCsrfSecurityConfig.class
+es/udc/fi/dc/fd/enrollment/EnrollmentServiceTest.class
+es/udc/fi/dc/fd/activity/ActivityIntegrationTest.class
+es/udc/fi/dc/fd/config/WebSecurityConfigurationAware.class
+es/udc/fi/dc/fd/account/AccountServiceTest.class
+es/udc/fi/dc/fd/ranking/RankingServiceTest.class

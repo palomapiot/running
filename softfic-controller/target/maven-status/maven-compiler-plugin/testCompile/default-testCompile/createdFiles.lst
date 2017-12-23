@@ -1,0 +1,12 @@
+es/udc/fi/dc/fd/enrollment/EnrollmentControllerTest.class
+es/udc/fi/dc/fd/follow/FollowControllerTest.class
+es/udc/fi/dc/fd/web/SeleniumWebIT.class
+es/udc/fi/dc/fd/signup/SignupControllerTest.class
+es/udc/fi/dc/fd/config/EmbeddedDataSourceConfig.class
+es/udc/fi/dc/fd/config/WebAppConfigurationAware.class
+es/udc/fi/dc/fd/config/NoCsrfSecurityConfig.class
+es/udc/fi/dc/fd/race/RaceControllerTest.class
+es/udc/fi/dc/fd/account/UserAuthenticationIntegrationTest.class
+es/udc/fi/dc/fd/ranking/RankingControllerTest.class
+es/udc/fi/dc/fd/config/WebSecurityConfigurationAware.class
+es/udc/fi/dc/fd/activity/ActivityControllerTest.class

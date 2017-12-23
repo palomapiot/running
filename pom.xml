@@ -1,0 +1,370 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>es.udc.fi.dc.fd</groupId>
+    <artifactId>softfic</artifactId>
+    <packaging>pom</packaging>
+    <version>4.0</version>
+    <name>Softfic Running</name>
+    
+    <!-- Padre -->
+    <parent>
+        <groupId>io.spring.platform</groupId>
+        <artifactId>platform-bom</artifactId>
+        <version>Athens-SR1</version>
+        <relativePath />
+    </parent>
+
+    <!-- Distintos módulos de la app -->
+    <modules>
+        <module>softfic-model</module>
+        <module>softfic-controller</module>
+    </modules>
+
+	<!-- Variables del pom -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java-version>1.8</java-version>
+		<!-- Override Spring version -->
+		<!-- spring.version>4.3.9.RELEASE</spring.version -->
+		<!-- Thymeleaf 3 -->
+		<org.thymeleaf-version>3.0.6.RELEASE</org.thymeleaf-version>
+		<org.thymeleaf.extras.springsecurity4-version>3.0.2.RELEASE</org.thymeleaf.extras.springsecurity4-version>
+		<nz.net.ultraq.thymeleaflayout-version>2.2.2</nz.net.ultraq.thymeleaflayout-version>
+		<thymeleaf-extras-java8time-version>3.0.0.RELEASE</thymeleaf-extras-java8time-version>
+		<!-- AssertJ -->
+		<assertj-core-version>3.8.0</assertj-core-version>
+		<!-- Sonar/Jacoco integration. Note that these properties need to be defined outside the "coverage" profile
+		because we want to be to able to execute mvn sonar:sonar without passing a profile -->
+		<!-- Tells Sonar to use jacoco for coverage results -->
+		<sonar.projectKey>es.udc.fi.dc.fd:softfic</sonar.projectKey>
+		<sonar.projectName>${project.name}</sonar.projectName>
+		<sonar.projectVersion>${project.version}</sonar.projectVersion>
+		<sonar.language>java</sonar.language>
+		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<!-- Jacoco version to use -->
+		<jacoco.version>0.7.9</jacoco.version>
+		<!-- The Sonar Jacoco Listener for JUnit to extract coverage details per test -->
+		<sonar-jacoco-listeners.version>4.15.0.12310</sonar-jacoco-listeners.version>
+		
+		<jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+		<!-- === END of Sonar/Reporting settings === -->
+		<selenium.ver>3.7.1</selenium.ver>
+	</properties>
+	
+	<!-- ###################### PERFILES ###################### -->
+  	<profiles>
+	    <profile>
+	        <id>dev</id>
+	        <activation>
+     			 <activeByDefault>true</activeByDefault>
+    		</activation>
+	        <properties>
+	            <props.driverclass>com.mysql.jdbc.Driver</props.driverclass>
+	            <props.datasource>jdbc:mysql://localhost/running?useSSL=false</props.datasource>
+	            <props.username>running</props.username>
+	            <props.passwd>running</props.passwd>
+	            <props.dialect>org.hibernate.dialect.MySQLDialect</props.dialect>
+	            <props.tables>create</props.tables>
+	            <props.import>import.sql</props.import>
+	            <props.show>true</props.show>
+	            <props.format>true</props.format>
+	            <props.comments>false</props.comments>
+	        </properties>
+	        <dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</dependency>
+		    </dependencies>
+	    </profile>
+	    <profile>
+	        <id>prod</id>
+	        <properties>
+	            <props.driverclass>org.hsqldb.jdbcDriver</props.driverclass>
+	            <props.datasource>jdbc:hsqldb:mem:test</props.datasource>
+	            <props.username>softfic</props.username>
+	            <props.passwd>running</props.passwd>
+	            <props.dialect>org.hibernate.dialect.HSQLDialect</props.dialect>
+	            <props.tables>create</props.tables>
+	            <props.import>import.sql</props.import>
+	            <props.show>false</props.show>
+	            <props.format>false</props.format>
+	            <props.comments>false</props.comments>
+	        </properties>
+	        <dependencies>
+		        <dependency> 
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId> 
+				</dependency> 
+		    </dependencies>
+	    </profile>	    
+	</profiles>
+	<!-- ######################  FIN PERFILES ###################### -->
+
+    <!-- ############### Información de Maven site ################# -->
+    <description>Softfic running app for Fed and Med</description>
+    <url>http://deploy.fic.udc.es/softfic</url>
+    <organization>
+        <name>Facultad de Informática de A Coruña</name>
+        <url>https://www.fic.udc.es/</url>
+    </organization>
+    <licenses>
+      <license>
+        <name>Apache License 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      </license>
+    </licenses>
+    <developers>
+        <developer>
+          <id>david.tourino</id>
+          <name>David Touriño</name>
+          <email>david.tourino@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Scrum Master</role>
+            <role>Project Manager</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>paloma.piot</id>
+          <name>Paloma Piot</name>
+          <email>paloma.piot@udc.es</email>
+          <organization>Festis</organization>
+          <organizationUrl>https://festis.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Festis leader</role>
+            <role>CSS Manager</role>
+            <role>Paloma Programming Master</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>daniel.gabin</id>
+          <name>Daniel Gabín</name>
+          <email>daniel.gabin@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Localization Retrieval Master</role>
+            <role>Analyst</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>j.manuel.rey</id>
+          <name>Manuel Rey</name>
+          <email>j.manuel.rey@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Documentation reader</role>
+            <role>Criteria builder</role>
+            <role>Problems loader</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>brais.mcastro</id>
+          <name>Brais Muñiz</name>
+          <email>brais.mcastro@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Comment Master</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>d.vilarsanchez</id>
+          <name>David Vilasanchez</name>
+          <email>d.vilasanchez@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Stress Test leader</role>
+          </roles>
+        </developer>
+        <developer>
+          <id>alejandro.matos</id>
+          <name>Alejandro Matos</name>
+          <email>alejandro.matos@udc.es</email>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>Developer</role>
+            <role>Pelican Worker</role>
+          </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git@gitlab.fic.udc.es:root/softfic.git</connection>
+        <url>http://gitlab.fic.udc.es/root/softfic</url>
+    </scm>  
+    <contributors>
+        <contributor>
+          <name>Javier Parapar</name>
+          <email>javier.parapar@udc.es</email>
+          <url>http://www.dc.fi.udc.es/~parapar/</url>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>FeD Teacher</role>
+          </roles>
+        </contributor>
+        <contributor>
+          <name>Daniel Valcarce</name>
+          <email>daniel.valcarce@udc.es</email>
+          <url>www.dc.fi.udc.es/~dvalcarce/</url>
+          <organization>Facultad de Informática de A Coruña</organization>
+          <organizationUrl>https://www.fic.udc.es/</organizationUrl>
+          <roles>
+            <role>MeD Teacher</role>
+            <role>Client</role>
+          </roles>
+        </contributor>
+    </contributors>
+
+    <reporting>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>2.9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10.4</version>
+        </plugin>
+        <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <version>${jacoco.version}</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>2.20.1</version>
+            <configuration>
+                <argLine>${jacoco.agent.ut.arg}</argLine>
+                <!-- Specific to generate mapping between tests and covered code -->
+                <properties>
+                    <property>
+                        <name>listener</name>
+                        <value>org.sonar.java.jacoco.JUnitListener</value>
+                    </property>
+                </properties>
+                <!-- test failure ignore -->
+                <testFailureIgnore>true</testFailureIgnore>
+            </configuration>            
+        </plugin>
+        
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-site-plugin</artifactId>
+             <version>3.0</version>
+             <configuration>
+                 <stagingDirectory>{project.build.directory}/stage</stagingDirectory>
+                 <reportPlugins>
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-project-info-reports-plugin</artifactId>
+                         <version>2.4</version>
+                     </plugin>
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-javadoc-plugin</artifactId>
+                         <version>2.8</version>
+                         <configuration></configuration>
+                         <reportSets>
+                             <reportSet>
+                                 <id>non-aggregate</id>
+                                 <configuration>
+                                     <!-- Specific configuration for the aggregate report -->
+                                     <sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+                                 </configuration>
+                                 <reports>
+                                     <report>javadoc</report>
+                                 </reports>
+                             </reportSet>
+                             <reportSet>
+                                 <id>aggregate</id>
+                                 <configuration>
+                                     <!-- Specific configuration for the aggregate report -->
+                                     <sourcepath>${project.build.sourceDirectory}/../generated</sourcepath>
+                                 </configuration>
+                                 <reports>
+                                     <report>aggregate</report>
+                                 </reports>
+                             </reportSet>
+                         </reportSets>
+                     </plugin>
+                        <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-surefire-report-plugin</artifactId>
+                         <version>2.6</version>
+                     </plugin>
+                   </reportPlugins>
+             </configuration>
+         </plugin>
+      </plugins>
+    </reporting>
+    <!-- ############### Información de Maven site ################# -->
+	
+	<distributionManagement>
+  		<site>
+       		<id>${project.artifactId}-site</id>
+       		<url>${project.url}</url>
+     	</site>
+     </distributionManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+				  <groupId>org.jacoco</groupId>
+				  <artifactId>jacoco-maven-plugin</artifactId>
+				  <version>0.7.5.201505241946</version>
+				  <executions>
+				   <execution>
+				    <id>agent-for-ut</id>
+				    <goals>
+				     <goal>prepare-agent</goal>
+				    </goals>
+				    <configuration>
+				     <destFile>${sonar.jacoco.reportPath}</destFile>
+				     <append>true</append>
+				    </configuration>
+				   </execution>
+				   <execution>
+				    <id>agent-for-it</id>
+				    <goals>
+				     <goal>prepare-agent-integration</goal>
+				    </goals>
+				    <configuration>
+				     <destFile>${sonar.jacoco.itReportPath}</destFile>
+				     <append>true</append>
+				    </configuration>
+				   </execution>
+				  </executions>
+			    </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

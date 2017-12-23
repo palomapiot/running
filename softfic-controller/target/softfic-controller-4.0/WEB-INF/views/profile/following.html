@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{view.index.title}">Welcome!</title>
+<link rel="shortcut icon" th:href="@{/resources/images/favicon.ico}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/bootstrap.min.css}" />
+<link href="../../../resources/css/core.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/core.css}" />
+<script src="../../../resources/js/jquery.min.js"
+	th:src="@{/resources/js/jquery.min.js}"></script>
+<script src="../../../resources/js/bootstrap.min.js"
+	th:src="@{/resources/js/bootstrap.min.js}"></script>
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/utils.css}" />
+<link href="../../../resources/css/utils.css" rel="stylesheet"
+	media="screen" th:href="@{/resources/css/tables.css}" />
+</head>
+<body>
+	<div th:replace="fragments/layout :: header"></div>
+	<div class="col-xs-12">
+		<button type="button"
+			class="btn btn-default glyphicon glyphicon-arrow-left"
+			onclick="goBack()"></button>
+	</div>
+	<h2 class="text-center white">Following users</h2>
+	<div class="form-80wide">
+		<div class="container">
+			<div>
+				<table th:if="${not #lists.isEmpty(followPage.getContent())}"
+					class="table table-striped table-hover table-responsive mt-30">
+					<thead>
+						<tr>
+							<th class="col-xs-6 text-center">Username</th>
+						</tr>
+					</thead>
+					<tbody>
+					<tr th:each="follow: ${followPage.getContent()}">
+						<td class="text-center hand" th:text="${follow.followed.username}" 
+							th:onclick="'window.location.href = \'' + @{/myprofile?accId={accId}(accId=${follow.followed.id})} + '\''">
+							name
+						</td>
+					</tbody>	
+				</table>
+				<p th:if="${#lists.isEmpty(followPage.getContent())}"
+					class="h4 text-center">You are following 0 users.</p>
+			</div>
+		</div>
+	
+		<!-- Pagination Bar -->
+		<div th:if="${not #lists.isEmpty(followPage.getContent())}">
+			<div class="text-center">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li
+							th:class="${not followPage.hasPrevious()}? 'disabled page-item' : 'page-item'">
+							<span th:if='${not followPage.hasPrevious()}'>&laquo;</span> <a
+							class="page-link" th:if='${followPage.hasPrevious()}'
+							th:href="@{/following(page=(${followPage.getNumber()}-1),
+			        			 email=${param.email})}"
+							title="Go to previous page">&laquo;</a>
+						</li>
+						<li
+							th:each="i : ${#numbers.sequence(1, followPage.getTotalPages())}"
+							th:class="${i == (followPage.getNumber()+1)}? 'active page-item' : 'page-item'">
+							<span th:if='${i == (followPage.getNumber()+1)}' th:text='${i}'>1</span>
+							<a class="page-link"
+							th:if='${not (i == (followPage.getNumber()+1))}'
+							th:href="@{/following(page=(${i}-1), 
+			       				email=${param.email})}">
+								<span th:text='${i}'>1</span>
+						</a>
+						</li>
+						<li
+							th:class="${followPage.hasNext()}? 'page-item' : 'disabled page-item'">
+							<span th:if='${not followPage.hasNext()}'>&raquo;</span> <a
+							class="page-link" th:if='${followPage.hasNext()}'
+							th:href="@{/following(page=(${followPage.getNumber()}+1), 
+			        			email=${param.email})}"
+							title='Go to next page'>&raquo;</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+<script>
+    function goBack() {
+	    window.history.back()
+	}
+    function rowClicked(value) {
+        location.href = "/profile?id=" + value + "&page=0";
+    }
+</script>
+	<div th:replace="fragments/layout :: footer"></div>
+</body>

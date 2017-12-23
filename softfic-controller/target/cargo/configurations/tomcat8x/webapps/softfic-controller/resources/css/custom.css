@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.button {
+    display: block;
+    margin: 0 auto;
+    float: none;
+    width: 100px;
+}
+
+.align-center {
+    display: block;
+    margin: 0 auto;
+}
+
+.form-inline>.form-group>label {
+    min-width: 100px;
+}
+
+.form-inline {
+    min-height: 47px;
+}
+
+body {
+    background: linear-gradient(rgba(0, 0, 102, .9),
+        rgba(51, 119, 255, .6)),
+        url('http://25.media.tumblr.com/tumblr_lyye58uyin1r1o8ppo1_500.gif');
+    background-size: 100%;
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+    height: 100%;
+    width: 100%;
+}
+
+.white {
+    color: #ffffff;
+}
+
+.red {
+    color: #ff0000;
+}
